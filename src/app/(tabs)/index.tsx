@@ -1,9 +1,12 @@
 import { View, Text } from "react-native";
+import { styles } from "../../styles/home.styles";
 
 const Index = () => {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home</Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+         <Text style={styles.headerTitle}>Music Rewards</Text>
+         </View>
     </View>
   );
 };

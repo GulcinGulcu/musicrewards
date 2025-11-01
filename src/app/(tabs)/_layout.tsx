@@ -1,12 +1,23 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../../constants/theme";
 
 function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#7553DB",
+        tabBarActiveTintColor: COLORS.primary,
+        tabBarInactiveTintColor: COLORS.grey,
+        tabBarShowLabel: false,
+        tabBarStyle: {
+          backgroundColor: "#000",
+          borderTopWidth: 0,
+          position: "absolute",
+          elevation: 0,
+          height: 40,
+          paddingBottom: 8,
+        },
       }}
     >
       <Tabs.Screen
@@ -24,6 +35,15 @@ function TabsLayout() {
           title: "Profile",
           tabBarIcon: ({ size, color }) => (
             <Ionicons name="person-circle" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="bookmarks"
+        options={{
+          title: "Bookmarks",
+          tabBarIcon: ({ size, color }) => (
+            <Ionicons name="bookmark" size={size} color={color} />
           ),
         }}
       />
