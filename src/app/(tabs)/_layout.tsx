@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants/theme";
 
-function TabsLayout() {
+export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
@@ -50,5 +50,3 @@ function TabsLayout() {
     </Tabs>
   );
 }
-
-export default TabsLayout;
