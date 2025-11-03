@@ -26,7 +26,6 @@ export default function Index() {
           <Text style={styles.heroSectionContentSubtitle}>
             Feel the rhythm, earn the vibe.
           </Text>
-          <NeonButton title="Listen Now" onPress={() => {}} />
         </View>
       </ImageBackground>
       <FlatList
