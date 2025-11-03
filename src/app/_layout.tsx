@@ -1,12 +1,20 @@
 import { Stack } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
-import { setupPlayer } from "../services/trackPlayerService";
+import TrackPlayer from "react-native-track-player";
+import { setupPlayer } from "../services/playbackService";
+
+TrackPlayer.registerPlaybackService(() =>
+  require("../services/playbackService").default
+);
 
 export default function RootLayout() {
   useEffect(() => {
-    setupPlayer();
+    setupPlayer().catch((error) => {
+      console.error("Failed to setup TrackPlayer:", error);
+    });
   }, []);
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={{ flex: 1, backgroundColor: "#000" }}>
