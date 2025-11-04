@@ -1,17 +1,17 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../../constants/theme";
+import { COLORS, gradientColors } from "../../constants/theme";
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: COLORS.primary,
+        tabBarActiveTintColor: gradientColors[1],
         tabBarInactiveTintColor: COLORS.grey,
         tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: "#000",
+          backgroundColor: COLORS.background,
           borderTopWidth: 0,
           position: "absolute",
           elevation: 0,
@@ -38,12 +38,12 @@ export default function TabsLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="bookmarks"
+       <Tabs.Screen
+        name="settings"
         options={{
-          title: "Bookmarks",
+          title: "Settings",
           tabBarIcon: ({ size, color }) => (
-            <Ionicons name="bookmark" size={size} color={color} />
+            <Ionicons name="settings" size={size} color={color} />
           ),
         }}
       />
