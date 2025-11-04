@@ -4,7 +4,6 @@ import { useMusicStore } from "../../stores/musicStore";
 import MusicCard from "../../components/MusicChallengeCard";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "../../constants/theme";
-import NeonButton from "../../components/ui/NeonButton";
 
 export default function Index() {
   const challenges = useMusicStore((state) => state.challenges);
