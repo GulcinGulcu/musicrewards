@@ -1,11 +1,13 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../constants/theme";
+import { COLORS, gradientColors } from "../constants/theme";
 import { LinearGradient } from "expo-linear-gradient";
 import OutlineBadge from "./ui/Badge";
-import { handlePlay } from "../utils/handlePlay";
 import GlassButton from "./ui/GlassButton";
 import { Dimensions, StyleSheet } from "react-native";
+import { useProgress } from "react-native-track-player";
+import { useMusicStore } from "../stores/musicStore";
+import { useChallengePlayer } from "../hooks/useMusicPlayer";
 
 interface MusicChallangeCardProps {
   challenge: {
@@ -23,13 +25,25 @@ interface MusicChallangeCardProps {
 }
 
 const MusicChallangeCard = ({ challenge }: MusicChallangeCardProps) => {
+  const { play, isPlaying, currentTrack } = useChallengePlayer();
+  const progress = useProgress();
+  const positions = useMusicStore((s) => s.positions);
+
+  const isCurrent = currentTrack?.id === challenge.id;
+
+  const positionToShow = isCurrent
+    ? progress.position
+    : positions[challenge.id] ?? 0;
+  const durationToUse = isCurrent
+    ? progress.duration || challenge.duration
+    : challenge.duration;
+  const progressPercent =
+    durationToUse > 0 ? (positionToShow / durationToUse) * 100 : 0;
+
   return (
     <View style={styles.musicChallangeCardContainer}>
       <View style={styles.musicChallangeCardHeader}>
         <OutlineBadge label={challenge.difficulty} />
-        <Text style={{ color: COLORS.white }}>
-          {formatDuration(challenge.duration)}
-        </Text>
       </View>
       <View style={styles.musicChallangeCardInfo}>
         <Text style={styles.musicChallangeCardTitle}>{challenge.title}</Text>
@@ -54,17 +68,18 @@ const MusicChallangeCard = ({ challenge }: MusicChallangeCardProps) => {
           }
           onPress={() => console.log("touched")}
         />
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => handlePlay(challenge)}
-        >
+        <TouchableOpacity activeOpacity={0.8} onPress={() => play(challenge)}>
           <LinearGradient
-            colors={["#D50C86", "#E41A6E", "#EB264D"]}
+            colors={gradientColors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.playButtonContainer}
           >
-            <Ionicons name="play" color={COLORS.white} size={45}></Ionicons>
+            <Ionicons
+              name={isPlaying && isCurrent ? "pause" : "play"}
+              color={COLORS.white}
+              size={45}
+            />
           </LinearGradient>
         </TouchableOpacity>
         <GlassButton
@@ -84,13 +99,53 @@ const MusicChallangeCard = ({ challenge }: MusicChallangeCardProps) => {
           <Ionicons name="repeat-outline" color={COLORS.grey} size={20} />
         </TouchableOpacity>
       </View>
+      <View style={styles.progressBarContainer}>
+        <View style={styles.progressBar}>
+          <View
+            style={[
+              styles.progressFill,
+              {
+                width: `${progressPercent}%`,
+                backgroundColor: isCurrent
+                  ? COLORS.primary
+                  : COLORS.surfaceLight,
+              },
+            ]}
+          />
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginTop: 4,
+          }}
+        >
+          <Text
+            style={[
+              styles.currentTime,
+              isCurrent ? styles.visible : styles.dimmed,
+            ]}
+          >
+            {formatDuration(positionToShow)}
+          </Text>
+          <Text
+            style={[
+              styles.totalTime,
+              isCurrent ? styles.visible : styles.dimmed,
+            ]}
+          >
+            {formatDuration(durationToUse)}
+          </Text>
+        </View>
+      </View>
     </View>
   );
 };
 
 function formatDuration(seconds: number): string {
+  if (!seconds || isNaN(seconds)) return "0:00";
   const minutes = Math.floor(seconds / 60);
-  const remainingSeconds = seconds % 60;
+  const remainingSeconds = Math.floor(seconds % 60);
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 }
 
@@ -99,13 +154,13 @@ const { width } = Dimensions.get("window");
 const styles = StyleSheet.create({
   musicChallangeCardContainer: {
     width: width - 32,
-    marginHorizontal: "auto",
+    alignSelf: "center",
     paddingHorizontal: 20,
     paddingVertical: 24,
-    borderWidth: 1,
     borderColor: COLORS.surfaceLight,
-    borderRadius: 12,
-    marginBottom: 8,
+    borderWidth: 1,
+    borderRadius: 16,
+    marginBottom: 12,
     alignItems: "center",
     justifyContent: "center",
     gap: 12,
@@ -123,8 +178,9 @@ const styles = StyleSheet.create({
   },
   musicChallangeCardTitle: {
     color: COLORS.white,
+    letterSpacing: 1,
     fontSize: 30,
-    fontWeight: "600",
+    fontWeight: "700",
     lineHeight: 55,
     textAlign: "center",
   },
@@ -134,17 +190,45 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
   },
+  controlsContainer: {
+    width: "80%",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
   playButtonContainer: {
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 50,
     padding: 10,
   },
-  controlsContainer: {
+  progressBarContainer: {
+    marginTop: 16,
     width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+  },
+  progressBar: {
+    height: 6,
+    borderRadius: 4,
+    backgroundColor: COLORS.grey,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+  currentTime: {
+    color: "#fff",
+    fontSize: 12,
+  },
+  totalTime: {
+    color: "#fff",
+    fontSize: 12,
+  },
+  dimmed: {
+    opacity: 0.5,
+  },
+  visible: {
+    opacity: 1,
   },
 });
 
