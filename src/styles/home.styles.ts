@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     color: COLORS.primary,
   },
   heroSectionBackground: {
-    height: 280,
+    height: 200,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -54,7 +54,7 @@ export const styles = StyleSheet.create({
     marginBottom: 8,
   },
   heroSectionContentSubtitle: {
-    color: COLORS.white,
+    color: COLORS.grey,
     fontFamily: "inter",
     fontWeight: 300,
     fontSize: 16,
