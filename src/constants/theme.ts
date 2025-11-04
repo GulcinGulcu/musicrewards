@@ -29,10 +29,14 @@ export const SAMPLE_CHALLENGES = [
 
 export const COLORS = {
   primary: "#D50C86",
-  secondary: "#EB264D",
-  background: "#000000",
+  secondary: "#E41A6E",
+  danger: "#f22e1f",
+  background: "#000",
+  darkGrey: "#14141B",
   surface: "#1A1A1A",
-  surfaceLight: "#2A2A2A",
+  surfaceLight: "#3A3A3A",
   white: "#FFFFFF",
   grey: "#9CA3AF",
 } as const;
+
+export const gradientColors = ["#D50C86", "#E41A6E", "#EB264D"] as const;
