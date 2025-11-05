@@ -10,7 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import { gradientColors } from "../constants/theme";
 import { LinearGradient } from "expo-linear-gradient";
-import OutlineBadge from "./ui/Badge";
+import OutlineBadge from "./ui/OutlineBadge";
 import GlassButton from "./ui/GlassButton";
 import { useProgress } from "react-native-track-player";
 import { useMusicStore } from "../stores/musicStore";
