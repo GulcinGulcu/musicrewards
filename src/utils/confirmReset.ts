@@ -1,27 +1,26 @@
 import { useMusicStore } from "../stores/musicStore";
 import { Alert } from "react-native";
+import { useUserStore } from "../stores/userStore";
 
 export function useConfirmReset() {
-  const hardReset = useMusicStore((s) => s.hardReset);
+  const resetMusicData = useMusicStore((s) => s.resetMusicData);
+  const resetUserData = useUserStore((s) => s.resetUserData);
 
   const confirmReset = async (opts?: { quick?: boolean }) => {
     // if "quick" flag is true, show a simpler dialog for Profile
     if (opts?.quick) {
-      Alert.alert(
-        "Start over?",
-        "Your current progress will be cleared.",
-        [
-          { text: "Cancel", style: "cancel" },
-          {
-            text: "Yes, start over",
-            style: "destructive",
-            onPress: async () => {
-              await hardReset();
-              Alert.alert("Progress cleared ✅");
-            },
+      Alert.alert("Start over?", "Your current progress will be cleared.", [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Yes, start over",
+          style: "destructive",
+          onPress: async () => {
+            await resetUserData();
+            await resetMusicData();
+            Alert.alert("Progress cleared ✅");
           },
-        ]
-      );
+        },
+      ]);
       return;
     }
 
@@ -35,7 +34,8 @@ export function useConfirmReset() {
           text: "Yes, reset everything",
           style: "destructive",
           onPress: async () => {
-            await hardReset();
+            await resetUserData();
+            await resetMusicData();
             Alert.alert("Data has been reset ✅");
           },
         },
