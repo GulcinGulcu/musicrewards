@@ -27,7 +27,7 @@ export const SAMPLE_CHALLENGES = [
   },
 ];
 
-export const COLORS = {
+export const DARK_COLORS = {
   primary: "#D50C86",
   secondary: "#E41A6E",
   danger: "#f22e1f",
@@ -37,6 +37,20 @@ export const COLORS = {
   surfaceLight: "#3A3A3A",
   white: "#FFFFFF",
   grey: "#9CA3AF",
+  text: "#fff",
+} as const;
+
+export const LIGHT_COLORS = {
+  primary: "#D50C86",
+  secondary: "#E41A6E",
+  danger: "#E63946",
+  background: "#FDF7F2", // krem arka plan
+  surface: "#FFFFFF", // kartlar / içerik alanı
+  surfaceLight: "#E5DED9", // sınırlar ve gölgeler için daha koyu ton
+  darkGrey: "#374151", // text ikincil
+  grey: "#6B7280", // ikonlar, placeholder
+  white: "#FFFFFF",
+  text: "#1A1A1A", // temel yazı rengi
 } as const;
 
 export const gradientColors = ["#D50C86", "#E41A6E", "#EB264D"] as const;
