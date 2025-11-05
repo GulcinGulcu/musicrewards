@@ -3,34 +3,20 @@ import { SAMPLE_CHALLENGES } from "../constants/theme";
 import { createJSONStorage, persist } from "zustand/middleware";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import TrackPlayer from "react-native-track-player";
-
-export type MusicChallenge = {
-  id: string;
-  title: string;
-  artist: string;
-  duration: number; // saniye
-  points: number;
-  audioUrl: string;
-  completed: boolean;
-  progress: number; // 0-100
-  description: string;
-  difficulty?: "easy" | "medium" | "hard";
-};
+import { MusicChallenge } from "../types";
 
 type MusicState = {
   challenges: MusicChallenge[];
   currentTrack: MusicChallenge | null;
   isPlaying: boolean;
   positions: Record<string, number>;
-
   setCurrentTrack: (track: MusicChallenge | null) => void;
   setIsPlaying: (value: boolean) => void;
   updateProgress: (id: string, progress: number) => void;
   markChallengeComplete: (id: string) => void;
   saveTrackPosition: (id: string, pos: number) => void;
   getSavedTrackPosition: (id: string) => number | undefined;
-
-  hardReset: () => Promise<void>;
+  resetMusicData: () => Promise<void>;
 };
 
 export const useMusicStore = create<MusicState>()(
@@ -67,8 +53,8 @@ export const useMusicStore = create<MusicState>()(
 
       getSavedTrackPosition: (id) => get().positions[id],
 
-      hardReset: async () => {
-        console.log("Reset starts...");
+      resetMusicData: async () => {
+        console.log("Reset music store starts...");
         try {
           // 1) reset track player
           try {
@@ -88,9 +74,9 @@ export const useMusicStore = create<MusicState>()(
             isPlaying: false,
           });
 
-          console.log("Reset completed");
+          console.log("Music Store Reset completed");
         } catch (err) {
-          console.warn("Error in hard reset", err);
+          console.warn("Error in hard reset of music store", err);
         }
       },
     }),
