@@ -1,20 +1,27 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
-export async function logMusicStorage() {
+export async function logAllStorage() {
   try {
-    const raw = await AsyncStorage.getItem("music-storage");
+    const keys = ["music-storage", "user-storage", "theme-storage"];
+    const results = await AsyncStorage.multiGet(keys);
 
-    if (!raw) {
-      console.log("Music storage is empty or not found.");
-      Alert.alert("Empty", "No saved data found in AsyncStorage.");
-      return;
-    }
+    // JSON parse & format
+    const parsedData = results.map(([key, value]) => {
+      if (!value) return `${key}: (empty)`;
+      try {
+        return `${key}: ${JSON.stringify(JSON.parse(value), null, 2)}`;
+      } catch {
+        return `${key}: (invalid JSON)`;
+      }
+    });
 
-    const parsed = JSON.parse(raw);
-    console.log("Music storage:", parsed);
-    Alert.alert("Persisted Data", JSON.stringify(parsed, null, 2));
+    const message = parsedData.join("\n\n");
+
+    console.log("Persisted storages:\n", message);
+    Alert.alert("Persisted Data", message);
   } catch (err) {
-    console.warn("Failed to read music storage:", err);
+    console.warn("Failed to read storages:", err);
+    Alert.alert("Error", "Failed to read persisted data.");
   }
 }
