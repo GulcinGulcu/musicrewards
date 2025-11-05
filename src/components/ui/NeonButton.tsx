@@ -1,8 +1,15 @@
-import { TouchableOpacity, ViewStyle } from "react-native";
+import React, { useMemo } from "react";
+import {
+  TouchableOpacity,
+  ViewStyle,
+  Text,
+  View,
+  StyleSheet,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { View, Text } from "react-native";
-import { StyleSheet } from "react-native";
-import { COLORS, gradientColors } from "../../constants/theme";
+import { useThemeStore } from "../../stores/themeStore";
+import { gradientColors } from "../../constants/theme";
+import { ThemeColors } from "../../types";
 
 interface NeonButtonProps {
   title?: string;
@@ -15,6 +22,11 @@ export default function NeonButton({
   onPress,
   style,
 }: NeonButtonProps) {
+  const { colors } = useThemeStore();
+
+  // Recreate styles only when colors change
+  const styles = useMemo(() => getStyles(colors), [colors]);
+
   return (
     <TouchableOpacity activeOpacity={0.85} onPress={onPress}>
       <LinearGradient
@@ -31,28 +43,30 @@ export default function NeonButton({
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    borderRadius: 50,
-    paddingVertical: 14,
-    paddingHorizontal: 44,
-    shadowColor: COLORS.secondary,
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 1,
-    shadowRadius: 20,
-    elevation: 15,
-  },
-  innerGlow: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  text: {
-    color: COLORS.white,
-    fontSize: 16,
-    fontWeight: "700",
-    letterSpacing: 0.6,
-    textShadowColor: "rgba(255, 50, 100, 0.9)",
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
-  },
-});
+// Dynamic styles
+const getStyles = (colors: ThemeColors) =>
+  StyleSheet.create({
+    button: {
+      borderRadius: 50,
+      paddingVertical: 14,
+      paddingHorizontal: 44,
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 1,
+      shadowRadius: 20,
+      elevation: 15,
+    },
+    innerGlow: {
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    text: {
+      color: colors.white,
+      fontSize: 16,
+      fontWeight: "700",
+      letterSpacing: 0.6,
+      textShadowColor: "rgba(255, 50, 100, 0.9)",
+      textShadowOffset: { width: 0, height: 0 },
+      textShadowRadius: 10,
+    },
+  });
