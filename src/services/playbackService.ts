@@ -11,8 +11,6 @@ export async function setupPlayer() {
       capabilities: [
         Capability.Play,
         Capability.Pause,
-        Capability.SkipToNext,
-        Capability.SkipToPrevious,
       ],
       // @ts-expect-error: installed RNTP types don’t include compactCapabilities, but runtime supports it on Android
       compactCapabilities: [Capability.Play, Capability.Pause],
