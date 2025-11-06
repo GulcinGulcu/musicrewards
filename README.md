@@ -37,11 +37,18 @@ npx expo run:ios
 .
 ├── assets/         # Images, fonts, icons
 ├── src/            # Application source code
+│   ├── app/          # App entry and navigation setup
+│   ├── components/   # Reusable UI components
+│   ├── constants/    # App-wide constants (colors, sizes, etc.)
+│   ├── hooks/        # Custom React hooks
+│   ├── services/     # API and async services
+│   ├── stores/       # Zustand stores (user, music, theme)
+│   ├── types/        # TypeScript types and interfaces
+│   └── utils/        # Helper and utility functions
 ├── app.js          # Entry point (Expo)
 ├── app.json        # Expo configuration
 ├── tsconfig.json   # TypeScript configuration
 └── package.json    # Scripts and dependencies
-
 
 
 
