@@ -38,7 +38,7 @@ export function useConfirmReset() {
           onPress: async () => {
             await resetUserData();
             await resetMusicData();
-            resetTheme();
+            await resetTheme();
             Alert.alert("Data has been reset ✅");
           },
         },
