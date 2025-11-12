@@ -21,6 +21,16 @@ export const useThemeStore = create<ThemeState>()(
           mode,
           colors: mode === "dark" ? DARK_COLORS : LIGHT_COLORS,
         }),
+      resetTheme: async () => {
+        console.log("Reset theme store starts...");
+        try {
+          await AsyncStorage.removeItem("theme-storage");
+          set({ mode: "dark", colors: DARK_COLORS });
+          console.log("Theme storage reset completed");
+        } catch (err) {
+          console.warn("Error in hard reset of theme store", err);
+        }
+      },
     }),
     {
       name: "theme-storage",

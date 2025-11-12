@@ -1,10 +1,12 @@
 import { useMusicStore } from "../stores/musicStore";
 import { Alert } from "react-native";
 import { useUserStore } from "../stores/userStore";
+import { useThemeStore } from "../stores/themeStore";
 
 export function useConfirmReset() {
   const resetMusicData = useMusicStore((s) => s.resetMusicData);
   const resetUserData = useUserStore((s) => s.resetUserData);
+  const resetTheme = useThemeStore((s) => s.resetTheme);
 
   const confirmReset = async (opts?: { quick?: boolean }) => {
     // if "quick" flag is true, show a simpler dialog for Profile
@@ -27,7 +29,7 @@ export function useConfirmReset() {
     // default: detailed Settings version
     Alert.alert(
       "Reset all data?",
-      "This will delete your progress and saved track positions. Are you sure?",
+      "This will delete stored progress, saved track positions and theme. Are you sure?",
       [
         { text: "Cancel", style: "cancel" },
         {
@@ -36,6 +38,7 @@ export function useConfirmReset() {
           onPress: async () => {
             await resetUserData();
             await resetMusicData();
+            resetTheme();
             Alert.alert("Data has been reset ✅");
           },
         },
